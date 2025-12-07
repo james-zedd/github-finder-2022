@@ -1,10 +1,4 @@
-import axios from 'axios';
-
-const GITHUB_URL = 'https://api.github.com';
-
-const github = axios.create({
-    baseURL: GITHUB_URL,
-});
+import github, { get as githubGet } from './githubClient';
 
 // search all github users
 export const searchUsers = async (text) => {
@@ -12,15 +6,15 @@ export const searchUsers = async (text) => {
         q: text,
     });
 
-    const response = await github.get(`/search/users?${params}`);
+    const response = await githubGet(`/search/users?${params}`);
     return response.data.items;
 };
 
 // get user and repos
 export const getUserAndRepos = async (login) => {
     const [user, repos] = await Promise.all([
-        github.get(`/users/${login}`),
-        github.get(`/users/${login}/repos`),
+        githubGet(`/users/${login}`),
+        githubGet(`/users/${login}/repos`),
     ]);
 
     return {
